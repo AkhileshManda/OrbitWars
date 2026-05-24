@@ -1,0 +1,35 @@
+# Orbit Wars - Agent Development Rules
+
+As an AI coding assistant working on this project, you MUST strictly adhere to the following rules:
+
+## 1. Code Architecture & Agent Implementation Rules
+- **Modular Agent Files**: Every new algorithm/agent strategy MUST be created in a new, dedicated Python file (e.g., `agent_<strategy_name>.py`). Do NOT overwrite `main.py` unless the user explicitly requests to update the primary submission agent.
+- **Agent Interface**: All agents must expose an `agent(obs)` function that accepts an observation dictionary/object and returns a list of moves: `[[from_planet_id, angle_in_radians, num_ships], ...]`.
+- **Named Tuples**: Always import and use the standard classes and named tuples from `kaggle_environments.envs.orbit_wars.orbit_wars` for clean and readable code:
+  ```python
+  from kaggle_environments.envs.orbit_wars.orbit_wars import Planet, Fleet, CENTER, ROTATION_RADIUS_LIMIT
+  ```
+- **Robust Field Parsing**: Always handle both object-like and dictionary-like observations gracefully:
+  ```python
+  player = obs.get("player", 0) if isinstance(obs, dict) else obs.player
+  raw_planets = obs.get("planets", []) if isinstance(obs, dict) else obs.planets
+  raw_fleets = obs.get("fleets", []) if isinstance(obs, dict) else obs.fleets
+  ```
+
+## 2. Testing and Notebook Workflow
+- **Local Testing via Jupyter**: Use the local Jupyter notebook `wdstf.ipynb` to import and test your agents, run matches, visualize the board, and compare different strategies.
+- **Notebook Integrity**: Do NOT corrupt or break `wdstf.ipynb`. Keep it clean and functional.
+- **Local Execution Command**: You can run simple tests using `kaggle-environments` via shell:
+  ```bash
+  python -c "
+  from kaggle_environments import make
+  env = make('orbit_wars', debug=True)
+  env.run(['agent_nearest_neutral.py', 'random'])
+  print([(i, s.reward) for i, s in enumerate(env.steps[-1])])
+  "
+  ```
+
+## 3. Git & File Tracking Rules
+- **No Large Notebook Tracking**: Do NOT track or commit large generated data files, model weights, or massive run outputs unless explicitly asked.
+- **Respect `.gitignore`**: The large Jupyter notebook `wdstf.ipynb` is git-ignored (`wdstf.ipynb` is in `.gitignore`) and must remain untracked so git operations remain fast. Do NOT force-track it or remove it from `.gitignore`.
+- **Version Control**: When creating a new agent, compile its implementation cleanly and commit it.
