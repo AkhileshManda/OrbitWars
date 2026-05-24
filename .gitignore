@@ -1,0 +1,11 @@
+# Ignore Jupyter notebooks
+wdstf.ipynb
+.ipynb_checkpoints/
+
+# Ignore Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environment variables / local configuration
+.env
